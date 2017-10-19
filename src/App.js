@@ -18,6 +18,7 @@ class App extends Component {
             To get started, edit <code>src/App.js</code> and save to reload right now!.
           </p>
         </div>
+        <div></div>
       </div>
     );
   }
