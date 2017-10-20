@@ -5,6 +5,18 @@ import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+  state = {
+    tests: ['test1', 'test2', 'test3']
+  }
+  
+  // constructor(props) {
+  //   super(props);
+  // }
+
+  componentDidMount() {
+    
+  }
+
   render() {
     return (
       <div className="App">
@@ -18,7 +30,10 @@ class App extends Component {
             To get started, edit <code>src/App.js</code> and save to reload right now!.
           </p>
         </div>
-        <div></div>
+        <ul>
+          {this.state.tests.map(test =>
+            <li key="test">{test}</li>)}
+        </ul>
       </div>
     );
   }
