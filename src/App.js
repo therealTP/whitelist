@@ -13,8 +13,14 @@ class App extends Component {
   //   super(props);
   // }
 
-  componentDidMount() {
-    
+  componentWillMount() {
+    fetch(
+
+    ).then(res => {
+
+    }).catch(err => {
+
+    });
   }
 
   render() {
@@ -26,13 +32,10 @@ class App extends Component {
         </header>
         <div className="Body">
           <Sidebar />
-          <p className="App-intro">
-            To get started, edit <code>src/App.js</code> and save to reload right now!.
-          </p>
         </div>
         <ul>
           {this.state.tests.map(test =>
-            <li key="test">{test}</li>)}
+            <li key={test}>{test}</li>)}
         </ul>
       </div>
     );
