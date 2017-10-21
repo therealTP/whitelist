@@ -4,9 +4,17 @@ import Sidebar from './Sidebar';
 import logo from './logo.svg';
 import './App.css';
 
+const myHeaders = new Headers();
+
+const myInit = { method: 'GET',
+               headers: myHeaders,
+               mode: 'cors',
+               cache: 'default' };
+
 class App extends Component {
   state = {
-    tests: ['test1', 'test2', 'test3']
+    tests: ['test1', 'test2', 'test3'],
+    sources: []
   }
   
   // constructor(props) {
@@ -15,11 +23,11 @@ class App extends Component {
 
   componentWillMount() {
     fetch(
-
+      'http://localhost:9000/source?limit=10', myInit
     ).then(res => {
-
-    }).catch(err => {
-
+      return res.blob();
+    }).then(data => {
+      this.setState({sources: data.response.results});
     });
   }
 
@@ -36,6 +44,10 @@ class App extends Component {
         <ul>
           {this.state.tests.map(test =>
             <li key={test}>{test}</li>)}
+        </ul>
+        <ul>
+          {this.state.sources.map(source =>
+            <li key={source.id}>{source.name}</li>)}
         </ul>
       </div>
     );
