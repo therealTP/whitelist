@@ -8,12 +8,12 @@ const myHeaders = new Headers();
 
 const myInit = { method: 'GET',
                headers: myHeaders,
-               mode: 'cors',
-               cache: 'default' };
+               mode: 'no-cors',
+               cache: 'no-cache'};
 
 class App extends Component {
   state = {
-    tests: ['test1', 'test2', 'test3'],
+    tests: ['test1', 'test2', 'test3', 'test4'],
     sources: []
   }
   
@@ -25,8 +25,10 @@ class App extends Component {
     fetch(
       'http://localhost:9000/source?limit=10', myInit
     ).then(res => {
-      return res.blob();
+      console.log("WOOPS", res);
+      return res.json();
     }).then(data => {
+      console.log("DATA", data);
       this.setState({sources: data.response.results});
     });
   }
