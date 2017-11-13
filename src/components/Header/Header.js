@@ -4,7 +4,7 @@ import './Header.css';
 class Header extends Component {
   render() {
     return (
-      <header>
+      <header className="Header">
         <h6>whitelist</h6>
       </header>
     );

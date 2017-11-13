@@ -1,54 +1,24 @@
 import React, { Component } from 'react';
-import Sidebar from './../Sidebar/Sidebar';
+import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
 import Header from './../Header/Header';
+import LoginView from './../routes/Login';
+import DashboardView from './../routes/Dashboard';
 
 import './App.css';
 
-const myHeaders = new Headers();
-
-const myInit = { method: 'GET',
-               headers: myHeaders,
-               mode: 'cors',
-               cache: 'no-cache'};
-
 class App extends Component {
-  state = {
-    tests: ['test1', 'test2', 'test3', 'test4'],
-    sources: []
-  };
-  
-  // constructor(props) {
-  //   super(props);
-  // }
-
-  componentWillMount() {
-    fetch(
-      'http://localhost:9000/source?limit=10', myInit
-    ).then(res => {
-      if (!res.ok) {
-        throw Error;
-      }
-      return res.json();
-    }).then(data => {
-      console.log("DATA", data);
-      this.setState({sources: data.response.results});
-    }).catch(err => {
-      console.log("ERR", err);
-    });
-  }
-
   render() {
     return (
-      <div className="App">
-        <Header />
-        <div className="Body">
-          <Sidebar />
+      <Router>
+        <div className="routes">
+          <Header />
+          <Redirect from="" exact to="/login" />
+          <Route path="/login" component={LoginView} />
+          <Route path="/register" render={() => (<h1>Register page</h1>)} />
+          <Route path="/dashboard" component={DashboardView} />
+          <Route path="/details/:sourceId" render={() => (<h1>Detail Page</h1>)} />
         </div>
-        <ul>
-          {this.state.sources.map(source =>
-            <li key={source.id}>{source.name} @ <a href={source.websiteUrl} target="_blank">{source.websiteUrl}</a></li>)}
-        </ul>
-      </div>
+      </Router>
     );
   }
 }
