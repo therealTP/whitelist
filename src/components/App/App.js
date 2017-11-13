@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Sidebar from './Sidebar';
+import Sidebar from './../Sidebar/Sidebar';
+import Header from './../Header/Header';
 
-import logo from './logo.svg';
 import './App.css';
 
 const myHeaders = new Headers();
@@ -15,7 +15,7 @@ class App extends Component {
   state = {
     tests: ['test1', 'test2', 'test3', 'test4'],
     sources: []
-  }
+  };
   
   // constructor(props) {
   //   super(props);
@@ -40,17 +40,10 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
+        <Header />
         <div className="Body">
           <Sidebar />
         </div>
-        <ul>
-          {this.state.tests.map(test =>
-            <li key={test}>{test}</li>)}
-        </ul>
         <ul>
           {this.state.sources.map(source =>
             <li key={source.id}>{source.name} @ <a href={source.websiteUrl} target="_blank">{source.websiteUrl}</a></li>)}
