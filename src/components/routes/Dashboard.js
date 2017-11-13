@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Sidebar from './../Sidebar/Sidebar';
-
 
 const myHeaders = new Headers();
 
@@ -12,7 +10,6 @@ const myInit = { method: 'GET',
 
 class DashboardView extends Component {
     state = {
-        tests: ['test1', 'test2', 'test3', 'test4'],
         sources: []
     };
       
@@ -38,14 +35,11 @@ class DashboardView extends Component {
     render() {
     return (
         <div className="Body">
-          <Sidebar />
+            <h3>Top News Sources:</h3>
             <ul>
                 {this.state.sources.map(source =>
                     <li key={source.id}>
-                        {source.name} @ 
-                        <a href={source.websiteUrl} target="_blank">
-                            {source.websiteUrl}
-                        </a>
+                        <Link to={`/source/${source.id}`}>{source.name}</Link>
                     </li>)}
             </ul>
         </div>
