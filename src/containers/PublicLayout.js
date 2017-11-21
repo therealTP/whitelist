@@ -1,27 +1,28 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import Header from '../stateless/Header/Header';
 
-class AuthedLayout extends Component {
+class PublicLayout extends Component {
+  state = {
+    loggedIn: false
+  };
+
   render() {
     const isLoggedIn = this.props.authed;
-    console.log("LOGGED IN?", isLoggedIn);
 
-    if (!isLoggedIn) {
+    if (isLoggedIn) {
       return (
         <Redirect to={{
-            pathname: '/login'
+            pathname: '/'
         }}/>
       );
     }
 
     return (
       <div>
-          <Header/>
           {this.props.children}
       </div>
     );
   }
 }
 
-export default AuthedLayout;
+export default PublicLayout;

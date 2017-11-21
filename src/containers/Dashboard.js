@@ -12,9 +12,9 @@ class DashboardView extends Component {
     // }
     
     componentDidMount() {
-        get('/source?limit=10')
+        get('/sources?limit=10')
         .then(data => {
-            this.setState({sources: data.response.results});
+            this.setState({sources: data.response.sources});
         }).catch(err => {
             console.log("ERR", err);
         });

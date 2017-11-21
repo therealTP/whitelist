@@ -1,12 +1,16 @@
-const baseUrl = 'http://localhost:9000';
+import { get as getLS } from './localStorage';
+
+const baseUrl = 'http://localhost:8080/api/v1';
 
 const generateRequest = (method, endpoint, body) => {
-    // Can add custom header config here:
     const myHeaders = new Headers();
-    
+    myHeaders.append('Content-Type', 'application/json');
+    const jwtHeader = 'Bearer ' + getLS('jwt');
+    myHeaders.set('Authorization', jwtHeader);
+
     const init = { 
         method,
-        body,
+        body: JSON.stringify(body),
         headers: myHeaders,
         mode: 'cors',
         cache: 'no-cache'
@@ -26,23 +30,24 @@ const handleFetchResponse = (res) => {
 /*
 Each method should return a promise:
 */
-const fetchService = {
-    get(endpoint) {
-        const request = generateRequest('GET', endpoint);
-        return fetch(request).then(handleFetchResponse);
-    },
-    post(endpoint, body) {
-        const request = generateRequest('POST', endpoint, body);
-        return fetch(request).then(handleFetchResponse);
-    },
-    put(endpoint, body) {
-        const request = generateRequest('PUT', endpoint, body);
-        return fetch(request).then(handleFetchResponse);
-    },
-    delete(endpoint) {
-        const request = generateRequest('DELETE', endpoint);
-        return fetch(request).then(handleFetchResponse);
-    }
+const get = (endpoint) => {
+    const request = generateRequest('GET', endpoint);
+    return fetch(request).then(handleFetchResponse);
+};
+
+const post = (endpoint, body) => {
+    const request = generateRequest('POST', endpoint, body);
+    return fetch(request).then(handleFetchResponse);
 }
 
-module.exports = fetchService;
+const put = (endpoint, body) => {
+    const request = generateRequest('PUT', endpoint, body);
+    return fetch(request).then(handleFetchResponse);
+};
+
+const del = (endpoint) => {
+    const request = generateRequest('DELETE', endpoint);
+    return fetch(request).then(handleFetchResponse);
+};
+
+export { get, post, put, del };

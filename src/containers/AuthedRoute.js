@@ -5,14 +5,12 @@ class AuthedRoute extends Component {
     state = {
         allowedRoles: ['user', 'admin'],
         adminRoles: ['admin']
-    }
+    };
 
     render() {
-        if (this.state.allowedRoles.includes(this.props.role)) {
-            return (
-                <Route exact={this.props.route.exact} path={this.props.route.path} component={this.props.route.component} />
-            );
-        } 
+        return (
+            <Route exact={this.props.route.exact} path={this.props.route.path} component={this.props.route.component} />
+        );
     }
 }
 

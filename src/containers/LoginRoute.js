@@ -1,25 +1,20 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
 import { set } from './../services/localStorage';
 import { post } from './../services/fetch';
 
-class LoginView extends Component {
+class LoginRoute extends Component {
     state = {
         email: "",
-        password: "",
-        redirect: false // this will trigger a redirect on login
+        password: ""
     };
 
     constructor(props) {
         super(props);
         // ...
-        console.log("PROPS", this.props);
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
-        this.setAsLoggedIn = () => {
-            this.props.loggedIn = true;
-        }
     }
 
     handleEmailChange(event) {
@@ -41,26 +36,15 @@ class LoginView extends Component {
         post('/users/login', body)
         .then(res => {
             set('jwt', res.response.token);
-            // Set app.state.loggedIn = true
-            // this.setAsLoggedIn();
-            // Go to dashboard
-            this.setState({redirect: true});
+            this.props.onLoggedIn();
         }).catch(err => {
             console.log("ERR", JSON.stringify(err));
         });
     }
-  
+
     render() {
-        // if redirecting, return redirect component:
-        if (this.state.redirect) {
-            return (
-                <Redirect to={{
-                    pathname: '/',
-                    state: { from: '/login' }
-                }}/>
-            );
-        } else { // if not, return login form:
-            return (
+        return (
+            <Route path="/login" render={() => (
                 <div className="loginPage">
                     <h3>Log in to Whitelist</h3>
                     <form action="">
@@ -72,9 +56,9 @@ class LoginView extends Component {
                     </form>
                     <Link to="/register">Register a new account</Link>
                 </div>
-            );
-        }
-  }
+            )} />
+        );
+    }
 }
 
-export default LoginView;
+export default LoginRoute;
