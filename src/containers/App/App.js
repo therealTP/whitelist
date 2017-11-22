@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import LoginView from '../Login';
 import LoginRoute from '../LoginRoute';
 import RegisterView from '../Register';
@@ -8,6 +8,10 @@ import SourceDetailView from '../SourceDetail';
 import AuthedLayout from '../AuthedLayout';
 import PublicLayout from '../PublicLayout';
 import AuthedRoute from '../AuthedRoute';
+import UserRoute from '../UserRoute';
+import PublicRoute from '../PublicRoute';
+import { get } from './../../services/fetch';
+import Preloader from './../../stateless/Preloader/Preloader';
 
 // Main Routing. https://reacttraining.com/react-router/web/example/route-config
 const routes = {
@@ -20,9 +24,8 @@ const routes = {
     }
   ],
   authed: [
-    { path: '/',
-      component: DashboardView,
-      exact: true
+    { path: '/dashboard',
+      component: DashboardView
     },
     { path: '/source/:sourceId',
       component: SourceDetailView
@@ -36,18 +39,17 @@ const routes = {
 };
 
 class App extends Component {
-  state = {
-    isLoggedIn: false,
-    user: {
-      id: "12345",
-      name: "Leroy Brown",
-      role: "USER" // "user", "admin", or undefined for logged out
-    },
-    preloading: true
-  };
-  
   constructor(props) {
     super(props);
+    this.state = {
+      isLoggedIn: false,
+      user: {
+        id: "12345",
+        name: "Leroy Brown",
+        role: "USER" // "user", "admin", or undefined for logged out
+      },
+      preloading: true
+    };
     this.onLoggedIn = this.setAuthedState.bind(this); 
   }
 
@@ -56,30 +58,35 @@ class App extends Component {
   }
 
   componentDidMount() {
-    if (!this.state.isLoggedIn) {
-      // set the current url/path for future redirection (we use a Redux action)
-      // then redirect (we use a React Router method)
-      // dispatch(setRedirectUrl(currentURL))
-      // browserHistory.replace("/login")
-    }
+    // get initial user auth data:
+    get('/users/auth')
+    .then(data => {
+      this.setState({
+        isLoggedIn: true,
+        preloading: false
+      });
+    })
+    .catch(err => {
+      this.setState({
+        preloading: false
+      });
+    });
   }
 
   render() {
+    const authed = this.state.isLoggedIn;
+    const preload = this.state.preloading;
+
+    if (preload) {
+      return <Preloader />
+    }
+
     return (
       <Router>
-        <Switch>
-          <PublicLayout authed={this.state.isLoggedIn}>
-            <LoginRoute onLoggedIn={this.onLoggedIn} />
-            {/* {routes.public.map((route, i) => (
-              <Route onLoggedIn={this.onLoggedIn} key={i} path={route.path} component={route.component} />
-            ))} */}
-          </PublicLayout>
-          <AuthedLayout authed={this.state.isLoggedIn}>
-            {routes.authed.map((route, i) => (
-              <AuthedRoute key={i} route={route} />
-            ))}
-          </AuthedLayout>
-        </Switch>
+        <div>
+          <LoginRoute authed={ authed } onLoggedIn={this.onLoggedIn} />
+          <UserRoute path='/' exact component={ DashboardView } authed={ authed } />
+        </div>
       </Router>
     );
   }

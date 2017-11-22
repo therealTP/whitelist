@@ -2,18 +2,19 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 
 class PublicLayout extends Component {
-  state = {
-    loggedIn: false
-  };
+  constructor(props) {
+    super(props);
+    // this.state = {
+    //   loggedIn: false
+    // };
+  }
 
   render() {
     const isLoggedIn = this.props.authed;
 
     if (isLoggedIn) {
       return (
-        <Redirect to={{
-            pathname: '/'
-        }}/>
+        <Redirect from="/login" to="/dashboard" />
       );
     }
 

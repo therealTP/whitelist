@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, Redirect } from 'react-router-dom';
 import { set } from './../services/localStorage';
 import { post } from './../services/fetch';
 
 class LoginRoute extends Component {
-    state = {
-        email: "",
-        password: ""
-    };
-
     constructor(props) {
         super(props);
-        // ...
+
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
+
+        this.state = {
+            email: '',
+            password: ''
+        };
     }
 
     handleEmailChange(event) {
@@ -38,14 +38,15 @@ class LoginRoute extends Component {
             set('jwt', res.response.token);
             this.props.onLoggedIn();
         }).catch(err => {
-            console.log("ERR", JSON.stringify(err));
+            console.log("ERR", err);
         });
     }
 
     render() {
         return (
             <Route path="/login" render={() => (
-                <div className="loginPage">
+                (this.props.authed) === false
+                ? <div className="loginPage">
                     <h3>Log in to Whitelist</h3>
                     <form action="">
                         <label>Enter Email:</label>
@@ -56,6 +57,7 @@ class LoginRoute extends Component {
                     </form>
                     <Link to="/register">Register a new account</Link>
                 </div>
+                : <Redirect to='/' />
             )} />
         );
     }

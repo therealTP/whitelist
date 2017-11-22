@@ -9,8 +9,8 @@ class AuthedLayout extends Component {
 
     if (!isLoggedIn) {
       return (
-        <Redirect to={{
-            pathname: '/login'
+        <Redirect from="/dashboard" to={{
+            pathname: "/login"
         }}/>
       );
     }
